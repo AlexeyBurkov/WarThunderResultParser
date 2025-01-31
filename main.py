@@ -141,9 +141,11 @@ def process_award_entry(entry: str, result_dict: dict[str, int], time_dict: dict
 def parse_award_rewards(data: str, time_dict: dict[str, tuple[int, int] | None]) -> tuple[dict[str, int], int]:
     result_dict: dict[str, int] = {key: 0 for key in time_dict.keys()}
     general_awards_sum = 0
-    awards_entries: list[str] = re.findall(r"^\s*\d?\d:\d\d.*?$", data, re.M)
-    for entry in awards_entries:
-        general_awards_sum += process_award_entry(entry, result_dict, time_dict)
+    awards = re.search(r"^Awards.*?\n(.*?)\n\n", data, re.M | re.S)
+    if awards:
+        awards_entries: list[str] = re.findall(r"^\s*\d?\d:\d\d.*?$", awards[1], re.M)
+        for entry in awards_entries:
+            general_awards_sum += process_award_entry(entry, result_dict, time_dict)
     return result_dict, general_awards_sum
 
 
@@ -172,13 +174,11 @@ def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, in
 def process_results(filename: str) -> tuple[dict[str, int], str | None]:
     data = read_data(filename)
     reward_multiplier = decimal.Decimal("0.467") if get_victory_status(data) else decimal.Decimal("0.2")
-    vehicles_rewards, time_bounds, awards_position = parse_main_rewards(data)
+    vehicles_rewards, time_bounds = parse_main_rewards(data)
     error1 = calculate_additional_reward(reward_multiplier, vehicles_rewards,
                                          int(re.search(r"^Reward for .*\s+(\d+) SL", data, re.M)[1]),
                                          bool(re.search("^Active boosters SL:", data, re.M)))
-    vehicles_awards, general_awards_sum = {key: 0 for key in vehicles_rewards.keys()}, 0
-    if awards_position is not None:
-        vehicles_awards, general_awards_sum = parse_award_rewards(data[awards_position:], time_bounds)
+    vehicles_awards, general_awards_sum = parse_award_rewards(data, time_bounds)
     final_rewards = {key: vehicles_rewards[key] + vehicles_awards[key] for key in vehicles_rewards.keys()}
     error2 = distribute_general_awards(general_awards_sum, final_rewards,
                                        int(re.search(r"^Earned: (\d+) SL", data, re.M)[1]))
