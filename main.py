@@ -2,6 +2,8 @@ import decimal
 import re
 from functools import reduce
 
+decimal.getcontext().prec = 15
+
 general_awards = [
     "Mission Maker",
     "Hero of the Sky",
@@ -164,5 +166,4 @@ def process_results():
 
 
 if __name__ == '__main__':
-    decimal.getcontext().prec = 15
     process_results()
