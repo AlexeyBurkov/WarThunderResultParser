@@ -37,13 +37,8 @@ general_awards = [
 
 
 def read_data() -> str:
-    data = ""
-    while True:
-        try:
-            data = "".join([data, input(), "\n"])
-        except EOFError:
-            break
-    return data
+    with open("input.txt") as f:
+        return f.read()
 
 
 def get_victory_status(line: str) -> bool:
