@@ -38,8 +38,8 @@ general_awards = [
 ]
 
 
-def read_data() -> str:
-    with open("input.txt") as f:
+def read_data(filename: str | None) -> str:
+    with open(filename or "input.txt") as f:
         return f.read()
 
 
@@ -127,18 +127,17 @@ def parse_award_rewards(data: str, time_dict: dict[str, tuple[int, int] | None])
 
 
 def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[str, int], exact_value: int,
-                                booster_present: bool):
+                                booster_present: bool) -> str | None:
     estimated_value = 0
     for k, v in result_dict.items():
         extra_v = int((decimal.Decimal(v) * multiplier).to_integral(decimal.ROUND_CEILING if booster_present else None))
         # !!! here might be problem with rounding
         estimated_value += extra_v
         result_dict[k] += extra_v
-    if estimated_value != exact_value:
-        print("Validation of additional reward failed", estimated_value, "!=", exact_value)
+    return f"Validation of additional reward failed {estimated_value} != {exact_value}" if estimated_value != exact_value else None
 
 
-def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, int], total: int):
+def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, int], total: int) -> str | None:
     raw_total = reduce(lambda acc, val: acc + val, result_dict.values(), 0)
     for k, v in result_dict.items():
         extra = round(general_awards_sum * v / raw_total) if raw_total > v else general_awards_sum
@@ -146,24 +145,28 @@ def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, in
         raw_total -= v
         result_dict[k] += extra
     final_total = reduce(lambda acc, val: acc + val, result_dict.values(), 0)
-    if final_total != total:
-        print("Validation of final rewards failed", final_total, "!=", total)
+    return f"Validation of final rewards failed {final_total} != {total}" if final_total != total else None
 
 
-def process_results():
-    data = read_data()
+def process_results(filename: str) -> tuple[dict[str, int], str | None]:
+    data = read_data(filename)
     reward_multiplier = decimal.Decimal("0.467") if get_victory_status(data) else decimal.Decimal("0.2")
     vehicles_rewards, time_bounds, awards_position = parse_main_rewards(data)
-    calculate_additional_reward(reward_multiplier, vehicles_rewards,
-                                int(re.search(r"^Reward for .*\s+(\d+) SL", data, re.M)[1]),
-                                bool(re.search("^Active boosters SL:", data, re.M)))
+    error1 = calculate_additional_reward(reward_multiplier, vehicles_rewards,
+                                         int(re.search(r"^Reward for .*\s+(\d+) SL", data, re.M)[1]),
+                                         bool(re.search("^Active boosters SL:", data, re.M)))
     vehicles_awards, general_awards_sum = {key: 0 for key in vehicles_rewards.keys()}, 0
     if awards_position is not None:
         vehicles_awards, general_awards_sum = parse_award_rewards(data[awards_position:], time_bounds)
     final_rewards = {key: vehicles_rewards[key] + vehicles_awards[key] for key in vehicles_rewards.keys()}
-    distribute_general_awards(general_awards_sum, final_rewards, int(re.search(r"^Earned: (\d+) SL", data, re.M)[1]))
-    print(final_rewards)
+    error2 = distribute_general_awards(general_awards_sum, final_rewards,
+                                       int(re.search(r"^Earned: (\d+) SL", data, re.M)[1]))
+    return final_rewards, (None if error2 is None else error2) if error1 is None else \
+        "|".join([error1, error2 if error2 is not None else ""])
 
 
 if __name__ == '__main__':
-    process_results()
+    # data, error = process_results("input.txt")
+    # if error is not None:
+    #     print(error)
+    # print("Result:", data)
