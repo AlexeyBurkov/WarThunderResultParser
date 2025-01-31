@@ -1,5 +1,6 @@
 import decimal
 import re
+import unittest
 from functools import reduce
 
 decimal.getcontext().prec = 15
@@ -165,8 +166,17 @@ def process_results(filename: str) -> tuple[dict[str, int], str | None]:
         "|".join([error1, error2 if error2 is not None else ""])
 
 
+class Tests(unittest.TestCase):
+    def test_correctness(self):
+        for i in range(1, 22):
+            with self.subTest(f"Testing file {i}.txt"):
+                _, error = process_results(f"test_data/{i}.txt")
+                self.assertIsNone(error)
+
+
 if __name__ == '__main__':
     # data, error = process_results("input.txt")
     # if error is not None:
     #     print(error)
     # print("Result:", data)
+    unittest.main()
