@@ -58,32 +58,51 @@ def get_time_in_seconds(line: str) -> int:
     return int(time_tokens[1]) + int(time_tokens[0]) * 60  # !!! Not likely but can be hours also
 
 
-def process_main_entry(entry: str, result_dict: dict[str, int], time_dict: dict[str, tuple[int, int]]):
-    time_vehicle_match = re.match(r"\s*(.*?)\s{4,}(.*?)\s{4,}", entry)
-    vehicle_name = time_vehicle_match[2]
-    reward_time = get_time_in_seconds(time_vehicle_match[1])
-    if time_dict[vehicle_name] is None:
-        time_dict[vehicle_name] = (reward_time, reward_time)
-    result_dict[vehicle_name] += get_reward_value(entry)
-    time_dict[vehicle_name] = (min(reward_time, time_dict[vehicle_name][0]),
-                               max(reward_time, time_dict[vehicle_name][1]))
+def process_played_vehicles(data: str, result_dict: dict[str, int], time_dict: dict[str, tuple[int, int] | None]):
+    played_vehicles: list[str] = re.findall(r"^\s{4,}(.*?)\s{4,}.*?$",
+                                            re.search(r"^Time Played.*?\n(.*?)\n\n", data, re.M | re.S)[1],
+                                            re.M)
+    for vehicle in played_vehicles:
+        result_dict[vehicle] = 0
+        time_dict[vehicle] = None
 
 
-def parse_main_rewards(data: str) -> tuple[dict[str, int], dict[str, tuple[int, int] | None], int | None]:
-    result_dict: dict[str, int] = {}
-    time_dict: dict[str, tuple[int, int] | None] = {}
+def process_activity(data: str, result_dict: dict[str, int], time_dict: dict[str, tuple[int, int] | None]):
     activity: list[tuple[str, str]] = re.findall(r"^\s{4,}(.*?)\s{4,}.*?(\d+) SL.*?$",
                                                  re.search(r"^Activity Time.*?\n(.*?)\n\n", data, re.M | re.S)[1],
                                                  re.M)
     for entry in activity:
-        result_dict[entry[0]] = int(entry[1])
-        time_dict[entry[0]] = None
+        if entry[0] not in result_dict:
+            result_dict[entry[0]] = int(entry[1])
+            time_dict[entry[0]] = None
+        result_dict[entry[0]] += int(entry[1])
+
+
+def process_main_entries(data: str, result_dict: dict[str, int], time_dict: dict[str, tuple[int, int] | None]):
     awards = re.search(r"^Awards.*?$", data, re.M)
     main_entries: list[str] = re.findall(r"^\s*\d?\d:\d\d.*?$",
                                          data if not awards else data[0:awards.start()], re.M)
     for entry in main_entries:
-        process_main_entry(entry, result_dict, time_dict)
-    return result_dict, time_dict, None if not awards else awards.end()
+        time_vehicle_match = re.match(r"\s*(.*?)\s{4,}(.*?)\s{4,}", entry)
+        vehicle_name = time_vehicle_match[2]
+        if vehicle_name not in result_dict:
+            result_dict[vehicle_name] = get_reward_value(entry)
+            time_dict[vehicle_name] = None
+        reward_time = get_time_in_seconds(time_vehicle_match[1])
+        if time_dict[vehicle_name] is None:
+            time_dict[vehicle_name] = (reward_time, reward_time)
+        result_dict[vehicle_name] += get_reward_value(entry)
+        time_dict[vehicle_name] = (min(reward_time, time_dict[vehicle_name][0]),
+                                   max(reward_time, time_dict[vehicle_name][1]))
+
+
+def parse_main_rewards(data: str) -> tuple[dict[str, int], dict[str, tuple[int, int] | None]]:
+    result_dict: dict[str, int] = {}
+    time_dict: dict[str, tuple[int, int] | None] = {}
+    process_played_vehicles(data, result_dict, time_dict)
+    process_activity(data, result_dict, time_dict)
+    process_main_entries(data, result_dict, time_dict)
+    return result_dict, time_dict
 
 
 def get_award_vehicle(award_time: int, time_bounds: dict[str, tuple[int, int] | None]) -> str | None:
