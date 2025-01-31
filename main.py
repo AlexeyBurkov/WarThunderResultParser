@@ -49,7 +49,8 @@ def get_victory_status(line: str) -> bool:
 
 
 def get_reward_value(line: str) -> int:
-    return int(re.search(r"\d+ SL", line)[0].split(" ")[0])  # !!! Here need to include parsing of all bonuses
+    reward = re.search(r"\d+ SL", line)
+    return int(reward[0].split(" ")[0]) if reward else 0
 
 
 def get_time_in_seconds(line: str) -> int:
