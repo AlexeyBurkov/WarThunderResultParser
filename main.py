@@ -4,6 +4,7 @@ import unittest
 from functools import reduce
 
 decimal.getcontext().prec = 15
+decimal10 = decimal.Decimal("10")
 
 general_awards = [
     "Mission Maker",
@@ -153,7 +154,13 @@ def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[s
                                 booster_present: bool) -> str | None:
     estimated_value = 0
     for k, v in result_dict.items():
-        extra_v = int((decimal.Decimal(v) * multiplier).to_integral(decimal.ROUND_CEILING if booster_present else None))
+        temp = decimal.Decimal(v) * multiplier
+        extra_v = int(
+            ((temp * decimal10)
+             .to_integral(decimal.ROUND_DOWN) / decimal10)
+            .to_integral(decimal.ROUND_CEILING) if booster_present
+            else temp.to_integral()
+        )
         # !!! here might be problem with rounding
         estimated_value += extra_v
         result_dict[k] += extra_v
