@@ -1,4 +1,5 @@
 import decimal
+import pathlib
 import re
 import unittest
 from functools import reduce
@@ -201,9 +202,17 @@ class Tests(unittest.TestCase):
                 self.assertIsNone(error)
 
 
+def save_new_data_for_testing():
+    test_data_path = pathlib.Path("./test_data")
+    last_added_file = max([int(re.match(r"(\d+).txt", p.name)[1]) for p in test_data_path.iterdir() if p.match("*.txt")])
+    new_file = test_data_path / f"{last_added_file + 1}.txt"
+    new_file.write_text(pathlib.Path("./input.txt").read_text())
+
+
 if __name__ == '__main__':
     # data, error = process_results("input.txt")
     # if error is not None:
     #     print(error)
     # print("Result:", data)
+    save_new_data_for_testing()
     unittest.main()
