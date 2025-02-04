@@ -41,11 +41,6 @@ general_awards = [
 ]
 
 
-def read_data(filename: str | None) -> str:
-    with open(filename or "input.txt") as f:
-        return f.read()
-
-
 def get_victory_status(line: str) -> bool:
     return re.match(r"\w+", line)[0] == "Victory"
 
@@ -179,8 +174,7 @@ def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, in
     return f"Validation of final rewards failed {final_total} != {total}" if final_total != total else None
 
 
-def process_results(filename: str) -> tuple[dict[str, int], str | None]:
-    data = read_data(filename)
+def process_results(data: str) -> tuple[dict[str, int], str | None]:
     reward_multiplier = decimal.Decimal("0.467") if get_victory_status(data) else decimal.Decimal("0.2")
     vehicles_rewards, time_bounds = parse_main_rewards(data)
     error1 = calculate_additional_reward(reward_multiplier, vehicles_rewards,
@@ -196,9 +190,9 @@ def process_results(filename: str) -> tuple[dict[str, int], str | None]:
 
 class Tests(unittest.TestCase):
     def test_correctness(self):
-        for i in range(1, 22):
-            with self.subTest(f"Testing file {i}.txt"):
-                _, error = process_results(f"test_data/{i}.txt")
+        for path in [p for p in pathlib.Path("./test_data").iterdir() if p.match("*.txt")]:
+            with self.subTest(f"Testing file {path}"):
+                _, error = process_results(path.read_text())
                 self.assertIsNone(error)
 
 
@@ -209,10 +203,18 @@ def save_new_data_for_testing():
     new_file.write_text(pathlib.Path("./input.txt").read_text())
 
 
-if __name__ == '__main__':
-    # data, error = process_results("input.txt")
+if __name__ == "__main__":
+    for i in [51]:
+        print("\nFile", i)
+        data = pathlib.Path(f"./test_data/{i}.txt").read_text()
+        res, error = process_results(data)
+        if error is not None:
+            print(error)
+        print("Result:", res)
+    # data = pathlib.Path("./input.txt").read_text()
+    # res, error = process_results(data)
     # if error is not None:
     #     print(error)
-    # print("Result:", data)
-    save_new_data_for_testing()
-    unittest.main()
+    # print("Result:", res)
+    # save_new_data_for_testing()
+    # unittest.main()
