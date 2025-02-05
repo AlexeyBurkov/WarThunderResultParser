@@ -204,17 +204,10 @@ def save_new_data_for_testing():
     last_added_file = max([int(re.match(r"(\d+).txt", p.name)[1])
                            for p in test_data_path.iterdir() if p.match("*.txt")])
     new_file = test_data_path / f"{last_added_file + 1}.txt"
-    new_file.write_text(pathlib.Path("./input.txt").read_text(encoding="utf-8"), encoding="utf-8")
+    new_file.write_bytes(pathlib.Path("./input.txt").read_bytes())
 
 
 if __name__ == "__main__":
-    for i in [51]:
-        print("\nFile", i)
-        data = pathlib.Path(f"./test_data/{i}.txt").read_text()
-        res, error = process_results(data)
-        if error is not None:
-            print(error)
-        print("Result:", res)
     # data = pathlib.Path("./input.txt").read_text()
     # res, error = process_results(data)
     # if error is not None:
