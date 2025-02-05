@@ -149,14 +149,17 @@ def parse_award_rewards(data: str, time_dict: dict[str, tuple[int, int] | None])
 def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[str, int], exact_value: int,
                                 booster_present: bool) -> str | None:
     estimated_value = 0
+    vehicles_quantity = len(result_dict.keys())
     for k, v in result_dict.items():
         temp = decimal.Decimal(v) * multiplier
-        extra_v = int(
-            ((temp * decimal10)
-             .to_integral(decimal.ROUND_DOWN) / decimal10)
-            .to_integral(decimal.ROUND_CEILING) if booster_present
-            else temp.to_integral()
-        )
+        if booster_present:
+            if vehicles_quantity > 1:
+                temp = temp.to_integral(rounding=decimal.ROUND_DOWN)
+            else:
+                temp = temp.to_integral(rounding=decimal.ROUND_CEILING)
+        else:
+            temp = temp.to_integral()
+        extra_v = int(temp)
         # !!! here might be problem with rounding
         estimated_value += extra_v
         result_dict[k] += extra_v
