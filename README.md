@@ -11,6 +11,6 @@ For now the only way to use app is to run the script with python interpreter.
 
 A lot of rewards aren't accounted in in-game statistic (like awards, severe damages, scouting rewards, victory or defeat bonuses), so it should be done manually for greater accuracy.
 
-Additionally, rewards of several vehicles in one battle being squashed, so for precise accounting you need to use details and calculater.
+Additionally, rewards of several vehicles in one battle being squashed, so for precise accounting you need to use details and calculator.
 
 This project is ready for use parser that works with the results and outputs the rewards per vehicle.
