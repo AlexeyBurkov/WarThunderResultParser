@@ -201,9 +201,10 @@ class Tests(unittest.TestCase):
 
 def save_new_data_for_testing():
     test_data_path = pathlib.Path("./test_data")
-    last_added_file = max([int(re.match(r"(\d+).txt", p.name)[1]) for p in test_data_path.iterdir() if p.match("*.txt")])
+    last_added_file = max([int(re.match(r"(\d+).txt", p.name)[1])
+                           for p in test_data_path.iterdir() if p.match("*.txt")])
     new_file = test_data_path / f"{last_added_file + 1}.txt"
-    new_file.write_text(pathlib.Path("./input.txt").read_text())
+    new_file.write_text(pathlib.Path("./input.txt").read_text(encoding="utf-8"), encoding="utf-8")
 
 
 if __name__ == "__main__":
