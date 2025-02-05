@@ -153,12 +153,12 @@ def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[s
         if booster_present:
             if vehicles_quantity > 1:
                 temp = temp.to_integral(rounding=decimal.ROUND_DOWN)
+                # !!! here might be problem with rounding
             else:
                 temp = temp.to_integral(rounding=decimal.ROUND_CEILING)
         else:
             temp = temp.to_integral()
         extra_v = int(temp)
-        # !!! here might be problem with rounding
         estimated_value += extra_v
         result_dict[k] += extra_v
     return f"Validation of additional reward failed {estimated_value} != {exact_value}" if estimated_value != exact_value else None
