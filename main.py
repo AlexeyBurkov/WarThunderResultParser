@@ -22,8 +22,6 @@ general_awards = [
     "The Best Squad",
     "Doomsday!",
     "One minute to midnight",
-    "The end is near",
-    "Peaceful atom",
 
     "Bombers' Nightmare",
     "Fighters' Nightmare",
