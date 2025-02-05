@@ -137,7 +137,7 @@ def process_award_entry(entry: str, result_dict: dict[str, int], time_dict: dict
 
 def parse_award_rewards(data: str, time_dict: dict[str, tuple[int, int] | None]) -> tuple[dict[str, int], int]:
     result_dict: dict[str, int] = {key: 0 for key in time_dict.keys()}
-    general_awards_sum = 0
+    general_awards_sum = int((re.search(r"^Other awards\s+(\d+) SL.*?$", data, re.M) or [0, 0])[1])
     awards = re.search(r"^Awards.*?\n(.*?)\n\n", data, re.M | re.S)
     if awards:
         awards_entries: list[str] = re.findall(r"^\s*\d?\d:\d\d.*?$", awards[1], re.M)
