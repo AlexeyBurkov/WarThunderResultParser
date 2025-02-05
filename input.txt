@@ -1,0 +1,114 @@
+Victory in the [Domination] Cargo port mission!
+
+Destruction of aircraft                   3     7762 SL     331 RP
+    11:36    F-84B-26    Tracers (12.7mm)    MiG-15bis ISh     200 mission points    — (full reward)                        3528 SL    142 RP
+    11:37    F-84B-26    Tracers (12.7mm)    ☢IL-28            200 mission points    — (full reward)                        3528 SL    164 RP
+    14:37    F-84B-26    Tracers (12.7mm)    Su-9              40 mission points     Own target (the rest of the reward)    706 SL     25 RP
+
+Destruction of ground vehicles            4     7800 SL     356 RP
+    3:03    T32    Default (12.7mm)    ZTS63              200 mission points    1950 SL    91 RP
+    4:50    T32    T41                 M113A1 (TOW)()     200 mission points    1950 SL    100 RP
+    6:54    T32    T41                 ELC bis            155 mission points    1950 SL    69 RP
+    8:15    T32    T41                 T-54 (1949)        200 mission points    1950 SL    96 RP
+
+Assistance in destroying the enemy        5     3768 SL     161 RP
+    1:53     T32         Default (12.7mm)    T-44-100        118 mission points    878 SL    38 RP
+    4:14     T32         T41                 T-54 (1947)     120 mission points    878 SL    41 RP
+    6:30     T32         Default (12.7mm)    BTR-80A         120 mission points    878 SL    40 RP
+    16:15    F-84B-26    Tracers (12.7mm)    T-44            130 mission points    567 SL    20 RP
+    18:21    F-84B-26    Tracers (12.7mm)    ZSU-23-4M2      132 mission points    567 SL    22 RP
+
+Severe damage to the enemy                1     2822 SL      99 RP
+    14:26    F-84B-26    Tracers (12.7mm)    Su-9     160 mission points    2822 SL    99 RP
+
+Critical damage to the enemy              7     1454 SL      64 RP
+    3:00     T32         T41                 ZTS63              60 mission points    195 SL    9 RP
+    4:50     T32         T41                 M113A1 (TOW)()     60 mission points    195 SL    10 RP
+    6:24     T32         Default (12.7mm)    BTR-80A            60 mission points    195 SL    9 RP
+    6:54     T32         T41                 ELC bis            47 mission points    195 SL    7 RP
+    8:15     T32         T41                 T-54 (1949)        60 mission points    195 SL    10 RP
+    10:48    F-84B-26    Tracers (12.7mm)    MiG-15bis ISh      66 mission points    353 SL    14 RP
+    18:14    F-84B-26    Tracers (12.7mm)    ZSU-23-4M2         66 mission points    126 SL    5 RP
+
+Damage to the enemy                      29     2960 SL     120 RP
+    1:29     T32         T41                 T-44-100           20 mission points    98 SL     4 RP
+    1:48     T32         T41                 T-44-100           20 mission points    98 SL     4 RP
+    1:52     T32         Default (12.7mm)    T-44-100           20 mission points    98 SL     4 RP
+    1:53     T32         Default (12.7mm)    T-44-100           20 mission points    98 SL     4 RP
+    3:00     T32         T41                 ZTS63              20 mission points    98 SL     5 RP
+    3:03     T32         Default (12.7mm)    ZTS63              20 mission points    98 SL     5 RP
+    4:13     T32         T41                 T-54 (1947)        20 mission points    98 SL     5 RP
+    4:50     T32         T41                 M113A1 (TOW)()     20 mission points    98 SL     5 RP
+    6:22     T32         T41                 BTR-80A            20 mission points    98 SL     4 RP
+    6:26     T32         Default (12.7mm)    BTR-80A            20 mission points    98 SL     4 RP
+    6:30     T32         Default (12.7mm)    BTR-80A            20 mission points    98 SL     4 RP
+    6:54     T32         T41                 ELC bis            20 mission points    98 SL     3 RP
+    8:15     T32         T41                 T-54 (1949)        20 mission points    98 SL     5 RP
+    10:48    F-84B-26    Tracers (12.7mm)    MiG-15bis ISh      11 mission points    176 SL    7 RP
+    10:53    F-84B-26    Tracers (12.7mm)    MiG-15bis ISh      11 mission points    176 SL    7 RP
+    11:37    F-84B-26    Tracers (12.7mm)    ☢IL-28             11 mission points    176 SL    8 RP
+    11:37    F-84B-26    Tracers (12.7mm)    ☢IL-28             11 mission points    176 SL    8 RP
+    13:23    F-84B-26    Tracers (12.7mm)    ZSU-57-2           11 mission points    63 SL     2 RP
+    13:28    F-84B-26    Tracers (12.7mm)    ZSU-57-2           11 mission points    63 SL     2 RP
+    14:26    F-84B-26    Tracers (12.7mm)    Su-9               11 mission points    176 SL    6 RP
+    14:31    F-84B-26    Tracers (12.7mm)    Su-9               11 mission points    176 SL    6 RP
+    16:10    F-84B-26    Tracers (12.7mm)    T-44               11 mission points    63 SL     2 RP
+    16:15    F-84B-26    Tracers (12.7mm)    T-44               11 mission points    63 SL     2 RP
+    17:33    F-84B-26    Tracers (12.7mm)    T-10M              11 mission points    63 SL     3 RP
+    17:35    F-84B-26    Tracers (12.7mm)    T-10M              11 mission points    63 SL     3 RP
+    17:35    F-84B-26    Tracers (12.7mm)    T-44-100           11 mission points    63 SL     2 RP
+    17:41    F-84B-26    Tracers (12.7mm)    T-44-100           11 mission points    63 SL     2 RP
+    18:12    F-84B-26    Tracers (12.7mm)    ZSU-23-4M2         11 mission points    63 SL     2 RP
+    18:17    F-84B-26    Tracers (12.7mm)    ZSU-23-4M2         11 mission points    63 SL     2 RP
+
+Awards                                   17    11750 SL
+    4:51     Rank does not matter         500 SL
+    6:28     Adamant                      300 SL
+    6:30     Assists streak!              150 SL
+    6:55     Tank Rescuer                 50 SL
+    6:55     Avenger                      150 SL
+    8:15     Tank Rescuer                 50 SL
+    8:15     According to Intelligence    100 SL
+    11:37    Ground Force Rescuer         150 SL
+    11:37    Eye for Eye                  300 SL
+    11:38    Multi strike!                100 SL
+    11:38    Peaceful atom                3000 SL
+    14:38    Ground Force Rescuer         100 SL
+    14:38    Avenger                      100 SL
+    14:38    Shadow strike streak!        100 SL
+    16:26    Teamwork                     600 SL
+    18:57    Wingman                      5000 SL
+    18:57    On Hand                      1000 SL
+
+Activity Time                                   2600 SL     135 RP
+    F-84B-26     1300 SL    17 RP
+    M3 Stuart    0 SL       0 RP
+    T32          1300 SL    118 RP
+
+Time Played                           17:44                2620 RP
+    F-84B-26     93%    9:32    1411 RP
+    M3 Stuart    0%     0:19    0 RP
+    T32          98%    7:53    1209 RP
+
+Reward for winning                             13620 SL
+
+Skill Bonus                                                1944 RP
+    F-84B-26     II    992 RP
+    M3 Stuart    II    0 RP
+    T32          II    952 RP
+
+Earned: 54536 SL, 5830 CRP
+Activity: 96%
+Damaged Vehicles: F-84B-26, T32
+Automatic purchasing of ammo and "Crew Replenishment": -2390 SL
+
+Researched unit:
+F-84F: 2975 RP
+M3 Bradley: 2855 RP
+
+Researching progress:
+F-84B-26 - FMBC mk.1: 93 RP
+T32 - Transmission: 2855 RP
+
+Session: 437a9f500049898
+Total: 52146 SL, 5830 CRP, 8778 RP
