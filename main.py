@@ -206,10 +206,10 @@ def save_new_data_for_testing():
 
 
 if __name__ == "__main__":
-    # data = pathlib.Path("./input.txt").read_text()
-    # res, error = process_results(data)
-    # if error is not None:
-    #     print(error)
-    # print("Result:", res)
+    data = pathlib.Path("./input.txt").read_text()
+    res, error = process_results(data)
+    if error is not None:
+        print(error)
+    print("Result:", res)
     # save_new_data_for_testing()
     # unittest.main()
