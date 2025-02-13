@@ -145,23 +145,43 @@ def parse_award_rewards(data: str, time_dict: dict[str, tuple[int, int] | None])
 
 
 def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[str, int], exact_value: int,
-                                booster_present: bool) -> str | None:
+                                booster_present: bool) -> list[str] | None:
     estimated_value = 0
     vehicles_quantity = len(result_dict.keys())
-    for k, v in result_dict.items():
+    result_dict_copy = result_dict.copy()
+    for k, v in result_dict_copy.items():
         temp = decimal.Decimal(v) * multiplier
         if booster_present:
+            # !!! here might be problem with rounding
             if vehicles_quantity > 1:
                 temp = temp.to_integral(rounding=decimal.ROUND_DOWN)
-                # !!! here might be problem with rounding
             else:
                 temp = temp.to_integral(rounding=decimal.ROUND_CEILING)
         else:
             temp = temp.to_integral()
         extra_v = int(temp)
         estimated_value += extra_v
-        result_dict[k] += extra_v
-    return f"Validation of additional reward failed {estimated_value} != {exact_value}" if estimated_value != exact_value else None
+        result_dict_copy[k] += extra_v
+    if estimated_value == exact_value:
+        for k in result_dict_copy.keys():
+            result_dict[k] = result_dict_copy[k]
+        return None
+    return_value = [f"Error in additional reward: {estimated_value} != {exact_value}, "
+                    "fallback to distribute result"]
+    raw_total = reduce(lambda acc, val: acc + val, result_dict.values(), 0)
+    remaining_exact = exact_value
+    estimated_distribution_value = 0
+    for k, v in result_dict.items():
+        if raw_total != 0:
+            temp = int(decimal.Decimal(round(v * remaining_exact / raw_total)))
+            raw_total -= v
+            remaining_exact -= temp
+            result_dict[k] += temp
+            estimated_distribution_value += temp
+    if estimated_distribution_value != exact_value:
+        return_value.append("Error in fallback calculation of additional reward: "
+                            f"{estimated_distribution_value} != {exact_value}")
+    return return_value
 
 
 def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, int], total: int) -> str | None:
@@ -186,7 +206,7 @@ def process_results(data: str) -> tuple[dict[str, int], str | None]:
     error2 = distribute_general_awards(general_awards_sum, final_rewards,
                                        int(re.search(r"^Earned: (\d+) SL", data, re.M)[1]))
     return final_rewards, (None if error2 is None else error2) if error1 is None else \
-        "|".join([error1, error2 if error2 is not None else ""])
+        "\n".join([*error1, error2 if error2 is not None else ""])
 
 
 class Tests(unittest.TestCase):
