@@ -198,9 +198,11 @@ def distribute_general_awards(general_awards_sum: int, result_dict: dict[str, in
 def process_results(data: str) -> tuple[dict[str, int], str | None]:
     reward_multiplier = decimal.Decimal("0.467") if get_victory_status(data) else decimal.Decimal("0.2")
     vehicles_rewards, time_bounds = parse_main_rewards(data)
+    is_boosters_active = bool(re.search(r"^Active boosters SL:", data, re.M))
+    is_premium_active = bool(re.search(r"\(PA\)\d+", data))
     error1 = calculate_additional_reward(reward_multiplier, vehicles_rewards,
                                          int(re.search(r"^Reward for .*\s+(\d+) SL", data, re.M)[1]),
-                                         bool(re.search("^Active boosters SL:", data, re.M)))
+                                         is_boosters_active or is_premium_active)
     vehicles_awards, general_awards_sum = parse_award_rewards(data, time_bounds)
     final_rewards = {key: vehicles_rewards[key] + vehicles_awards[key] for key in vehicles_rewards.keys()}
     error2 = distribute_general_awards(general_awards_sum, final_rewards,
