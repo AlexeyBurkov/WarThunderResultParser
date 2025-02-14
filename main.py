@@ -153,10 +153,7 @@ def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[s
         temp = decimal.Decimal(v) * multiplier
         if booster_present:
             # !!! here might be problem with rounding
-            if vehicles_quantity > 1:
-                temp = temp.to_integral(rounding=decimal.ROUND_DOWN)
-            else:
-                temp = temp.to_integral(rounding=decimal.ROUND_CEILING)
+            temp = temp.to_integral(rounding=decimal.ROUND_CEILING)
         else:
             temp = temp.to_integral()
         extra_v = int(temp)
