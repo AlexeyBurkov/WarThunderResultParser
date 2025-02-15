@@ -196,7 +196,7 @@ def process_results(data: str) -> tuple[dict[str, int], str | None]:
     reward_multiplier = decimal.Decimal("0.467") if get_victory_status(data) else decimal.Decimal("0.2")
     vehicles_rewards, time_bounds = parse_main_rewards(data)
     is_boosters_active = bool(re.search(r"^Active boosters SL:", data, re.M))
-    is_premium_active = bool(re.search(r"\(PA\)\d+", data))
+    is_premium_active = bool(re.search(r"\(PA\)\d+(?: \+ \S*?)* = \d+ SL", data))
     error1 = calculate_additional_reward(reward_multiplier, vehicles_rewards,
                                          int(re.search(r"^Reward for .*\s+(\d+) SL", data, re.M)[1]),
                                          is_boosters_active or is_premium_active)
