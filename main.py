@@ -224,7 +224,7 @@ def save_new_data_for_testing():
 
 
 if __name__ == "__main__":
-    data = pathlib.Path("./input.txt").read_text()
+    data = pathlib.Path("./input.txt").read_text(encoding="utf-8")
     res, error = process_results(data)
     if error is not None:
         print(error)
