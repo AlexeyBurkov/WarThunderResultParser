@@ -81,7 +81,7 @@ def process_main_entries(data: str, result_dict: dict[str, int], time_dict: dict
         time_vehicle_match = re.match(r"\s*(.*?)\s{4,}(.*?)\s{4,}", entry)
         vehicle_name = time_vehicle_match[2]
         if vehicle_name not in result_dict:
-            result_dict[vehicle_name] = get_reward_value(entry)
+            result_dict[vehicle_name] = 0
             time_dict[vehicle_name] = None
         reward_time = get_time_in_seconds(time_vehicle_match[1])
         if time_dict[vehicle_name] is None:
