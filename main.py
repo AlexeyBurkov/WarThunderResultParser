@@ -147,7 +147,6 @@ def parse_award_rewards(data: str, time_dict: dict[str, tuple[int, int] | None])
 def calculate_additional_reward(multiplier: decimal.Decimal, result_dict: dict[str, int], exact_value: int,
                                 booster_present: bool) -> list[str] | None:
     estimated_value = 0
-    vehicles_quantity = len(result_dict.keys())
     result_dict_copy = result_dict.copy()
     for k, v in result_dict_copy.items():
         temp = decimal.Decimal(v) * multiplier
