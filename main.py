@@ -211,7 +211,7 @@ class Tests(unittest.TestCase):
     def test_correctness(self):
         for path in [p for p in pathlib.Path("./test_data").iterdir() if p.match("*.txt")]:
             with self.subTest(f"Testing file {path}"):
-                _, error = process_results(path.read_text())
+                _, error = process_results(path.read_text(encoding="utf-8"))
                 self.assertIsNone(error)
 
 
