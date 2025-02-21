@@ -215,12 +215,16 @@ class Tests(unittest.TestCase):
                 self.assertIsNone(error)
 
 
-def save_new_data_for_testing():
+def save_new_data_for_testing(save_problem: bool = False):
     test_data_path = pathlib.Path("./test_data")
     last_added_file = max([int(re.match(r"(\d+).txt", p.name)[1])
                            for p in test_data_path.iterdir() if p.match("*.txt")])
-    new_file = test_data_path / f"{last_added_file + 1}.txt"
-    new_file.write_bytes(pathlib.Path("./input.txt").read_bytes())
+    (test_data_path / f"{last_added_file + 1}.txt").write_bytes(pathlib.Path("./input.txt").read_bytes())
+    print("Saved new case")
+    if save_problem:
+        ((test_data_path / "problem_cases" / f"{last_added_file + 1}.txt")
+         .write_bytes(pathlib.Path("./input.txt").read_bytes()))
+        print("Saved new problematic case")
 
 
 if __name__ == "__main__":
@@ -229,5 +233,7 @@ if __name__ == "__main__":
     if error is not None:
         print(error)
     print("Result:", res)
-    # save_new_data_for_testing()
+    # save_new_data_for_testing((error is not None) or
+    #                           bool(re.search(r"^Active boosters SL:", data, re.M)) or
+    #                           bool(re.search(r"\(PA\)\d+(?: \+ \S*?)* = \d+ SL", data)))
     # unittest.main()
