@@ -80,7 +80,7 @@ class ConsoleApp:
             return True
         return True
 
-    def handle_quit(self):
+    def handle_quit(self) -> bool:
         if self.has_unsaved_changes:
             print("There are some unsaved changes, would you like to save them?(y/n)\n>>> ", end="")
             command = input()
