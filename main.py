@@ -46,6 +46,7 @@ class ConsoleApp:
             while command not in ["y", "n"]:
                 print("I didn't understand you, "
                       "please type: y (save changes) or n (proceed without saving)\n>>> ", end="")
+                command = input()
             if command == "y":
                 pass
         return False
