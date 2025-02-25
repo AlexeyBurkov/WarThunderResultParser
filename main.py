@@ -30,13 +30,54 @@ class ConsoleApp:
 
     def process_parse(self, command: str) -> bool:
         data = pathlib.Path("./input.txt").read_text(encoding="utf-8")
-        res, error = process_results(data)
+        result, error = process_results(data)
         if error is not None:
             print(error)
-        print("Result:", res)
+        print("Parsing result:", result)
         save_new_data_for_testing((error is not None) or
                                   bool(re.search(r"^Active boosters SL:", data, re.M)) or
                                   bool(re.search(r"\(PA\)\d+(?: \+ \S*?)* = \d+ SL", data)))
+        print("Would you like to improve parsing result?(y/n)\n>>> ", end="")
+        command = input()
+        while command not in ["y", "n"]:
+            print("I didn't understand you, "
+                  "please type: y (edit result) or n (proceed without editing)\n>>> ", end="")
+            command = input()
+        if command == "y":
+            cases = [k for k in result.keys()]
+            print(
+                "Entering edit mode...\n"
+                "When you ready to finish type: q\n"
+                "Please choose entry to edit:"
+            )
+            for i in range(len(cases)):
+                print(i + 1, "-", cases[i])
+            print(">>> ", end="")
+            command = input()
+            while command != "q":
+                while command != "q" and not command.isdigit() and not (0 < int(command) <= len(cases)):
+                    print("I didn't understand you, "
+                          "please type number between 1 and len(cases) or q\n>>> ", end="")
+                    command = input()
+                if command == "q":
+                    continue
+                case = cases[int(command) - 1]
+                print("Current value for", case, "=", result[case])
+                print("Please input value to add:\n>>> ",end="")
+                command = input()
+                while not command.isdigit() and not (command[0] == "-" and command[1:].isdigit()):
+                    print("I didn't understand you, "
+                          "please type valid number\n>>> ", end="")
+                    command = input()
+                print("Changing", result[case], "to", result[case] + int(command))
+                result[case] += int(command)
+                print(
+                    "Please choose entry to edit or q:\n>>> ", end=""
+                )
+                command = input()
+            print("Editing result: ", result)
+        if self.data is None:
+            return True
         return True
 
     def handle_quit(self):
