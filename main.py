@@ -80,6 +80,32 @@ class ConsoleApp:
             return True
         return True
 
+    def process_edit(self, command: str) -> bool:
+        if self.data is None:
+            print("Nothing to edit!")
+            return True
+        print(
+            "Please choose entry to edit:"
+        )
+        for i in range(len(self.data)):
+            print(i + 1, "-", self.data[i][0])
+        print(">>> ", end="")
+        command = input()
+        while not command.isdigit() and not (0 < int(command) <= len(self.data)):
+            print("I didn't understand you, "
+                  "please type number between 1 and len(cases) or q\n>>> ", end="")
+            command = input()
+        case_index = int(command) - 1
+        print("Current value for", self.data[case_index][0], "=", self.data[case_index][1])
+        print("Please input value to add:\n>>> ", end="")
+        command = input()
+        while not command.isdigit() and not (command[0] == "-" and command[1:].isdigit()):
+            print("I didn't understand you, "
+                  "please type valid number\n>>> ", end="")
+            command = input()
+        print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + int(command))
+        self.data[case_index][1] += int(command)
+
     def handle_quit(self) -> bool:
         if self.has_unsaved_changes:
             print("There are some unsaved changes, would you like to save them?(y/n)\n>>> ", end="")
