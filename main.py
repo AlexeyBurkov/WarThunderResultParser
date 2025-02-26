@@ -36,6 +36,13 @@ class ConsoleApp:
                 self.data = [(row[0], int(row[1]), row[2] == "True") for row in reader]
         self.has_unsaved_changes: bool = False
 
+    def _update_value(self, index: int, value: int):
+        self.data[index] = (
+            self.data[index][0],
+            self.data[index][1] + value,
+            self.data[index][2]
+        )
+
     def default_processor(self, command: str) -> bool:
         print("Unknown command typed:", command)
         return True
@@ -96,11 +103,7 @@ class ConsoleApp:
                 found = False
                 for i in range(len(self.data)):
                     if self.data[i][0] == k:
-                        self.data[i] = (
-                            self.data[i][0],
-                            self.data[i][1] + v,
-                            self.data[i][2]
-                        )
+                        self._update_value(i, v)
                         found = True
                         self.has_unsaved_changes = True
                         break
@@ -126,12 +129,7 @@ class ConsoleApp:
                             print(">>> ", end="")
                             command = receive_command(is_index(len(self.data)),
                                                       f"number between 1 and {len(self.data)}")
-                            case_index = int(command) - 1
-                            self.data[case_index] = (
-                                self.data[case_index][0],
-                                self.data[case_index][1] + v,
-                                self.data[case_index][2]
-                            )
+                            self._update_value(int(command) - 1, v)
         return True
 
     def process_edit(self, command: str) -> bool:
@@ -150,11 +148,7 @@ class ConsoleApp:
         print("Please input value to add:\n>>> ", end="")
         command = receive_command(is_math_expr, "valid number")
         print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + int(command))
-        self.data[case_index] = (
-            self.data[case_index][0],
-            self.data[case_index][1] + int(command),
-            self.data[case_index][2]
-        )
+        self._update_value(case_index, int(command))
         self.has_unsaved_changes = True
         return True
 
