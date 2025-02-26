@@ -121,6 +121,7 @@ class ConsoleApp:
             writer = csv.writer(f)
             for row in self.data:
                 writer.writerow([row[0], row[1], row[2]])
+        self.has_unsaved_changes = False
         return True
 
     def handle_quit(self) -> bool:
