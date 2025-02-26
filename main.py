@@ -129,7 +129,7 @@ class ConsoleApp:
             print("There are some unsaved changes, would you like to save them?(y/n)\n>>> ", end="")
             command = receive_command(is_yes_no, "y (save changes) or n (proceed without saving)")
             if command == "y":
-                pass
+                self.process_save("save")
         return False
 
     def process_quit(self, command: str) -> bool:
