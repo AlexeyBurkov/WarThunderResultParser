@@ -42,7 +42,7 @@ class ConsoleApp:
 
     def process_list(self, command: str) -> bool:
         if self.data is None:
-            print("No data to display!")
+            print("Nothing to display!")
             return True
         for entry in [row for row in self.data]:
             print(entry[0] + ":", entry[1])
@@ -111,6 +111,16 @@ class ConsoleApp:
             self.data[case_index][2]
         )
         self.has_unsaved_changes = True
+        return True
+
+    def process_save(self, command: str) -> bool:
+        if self.data is None:
+            print("Nothing to save!")
+            return True
+        with open(self.data_file_path) as f:
+            writer = csv.writer(f)
+            for row in self.data:
+                writer.writerow([row[0], row[1], row[2]])
         return True
 
     def handle_quit(self) -> bool:
