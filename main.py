@@ -33,7 +33,7 @@ class ConsoleApp:
         if data_file_path is not None:
             with open(self.data_file_path) as f:
                 reader = csv.reader(f)
-                self.data = [(row[0], int(row[1]), bool(row[2])) for row in reader]
+                self.data = [(row[0], int(row[1]), row[2] == "True") for row in reader]
         self.has_unsaved_changes: bool = False
 
     def default_processor(self, command: str) -> bool:
