@@ -106,7 +106,13 @@ class ConsoleApp:
         print("Please input value to add:\n>>> ", end="")
         command = command_cycle(is_math_expr, "valid number")
         print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + int(command))
-        self.data[case_index][1] += int(command)
+        self.data[case_index] = (
+            self.data[case_index][0],
+            self.data[case_index][1] + int(command),
+            self.data[case_index][2]
+        )
+        self.has_unsaved_changes = True
+        return True
 
     def handle_quit(self) -> bool:
         if self.has_unsaved_changes:
