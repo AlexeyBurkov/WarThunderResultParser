@@ -117,7 +117,7 @@ class ConsoleApp:
         if self.data is None:
             print("Nothing to save!")
             return True
-        with open(self.data_file_path) as f:
+        with open(self.data_file_path, "w", newline="") as f:
             writer = csv.writer(f)
             for row in self.data:
                 writer.writerow([row[0], row[1], row[2]])
