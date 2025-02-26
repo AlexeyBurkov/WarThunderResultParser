@@ -72,7 +72,7 @@ class ConsoleApp:
             command = ""
             while command != "q":
                 command = receive_command(lambda c: c == "q" or is_index(len(cases))(c),
-                                        f"number between 1 and {len(cases)} or q")
+                                          f"number between 1 and {len(cases)} or q")
                 if command == "q":
                     continue
                 case = cases[int(command) - 1]
@@ -87,6 +87,51 @@ class ConsoleApp:
             print("Editing result: ", result)
         if self.data is None:
             return True
+        print("Would you like to add result to existing data?(y/n)\n>>> ", end="")
+        command = receive_command(is_yes_no, "y (add result) or n (do not add result)")
+        if command == "y":
+            for k, v in result.items():
+                if v == 0:
+                    continue
+                found = False
+                for i in range(len(self.data)):
+                    if self.data[i][0] == k:
+                        self.data[i] = (
+                            self.data[i][0],
+                            self.data[i][1] + v,
+                            self.data[i][2]
+                        )
+                        found = True
+                        self.has_unsaved_changes = True
+                        break
+                if not found:
+                    print("Entry with name:", k, "was not found\n"
+                                                 "What would you like to do:\n"
+                                                 "n - add new entry\n"
+                                                 "e - assign to some other entry\n"
+                                                 "i - ignore\n"
+                                                 ">>> ", end="")
+                    command = receive_command(lambda c: c in ["n", "e", "i"],
+                                              "n (add new entry), e (choose existing) or i (ignore)")
+                    match command:
+                        case "i":
+                            continue
+                        case "n":
+                            self.data.append((k, v, False))
+                            self.has_unsaved_changes = True
+                        case "e":
+                            print("Please choose entry to edit:")
+                            for i in range(len(self.data)):
+                                print(i + 1, "-", self.data[i][0])
+                            print(">>> ", end="")
+                            command = receive_command(is_index(len(self.data)),
+                                                      f"number between 1 and {len(self.data)}")
+                            case_index = int(command) - 1
+                            self.data[case_index] = (
+                                self.data[case_index][0],
+                                self.data[case_index][1] + v,
+                                self.data[case_index][2]
+                            )
         return True
 
     def process_edit(self, command: str) -> bool:
