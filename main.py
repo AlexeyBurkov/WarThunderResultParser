@@ -84,7 +84,6 @@ class ConsoleApp:
                 print(
                     "Please choose entry to edit or q:\n>>> ", end=""
                 )
-                command = input()
             print("Editing result: ", result)
         if self.data is None:
             return True
