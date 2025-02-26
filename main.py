@@ -1,6 +1,9 @@
+import ast
 import csv
+import operator
 import pathlib
 import re
+from _ast import expr
 from typing import Callable
 
 from parsing import save_new_data_for_testing, process_results
@@ -14,8 +17,28 @@ def receive_command(command_validator: Callable[[str], bool], hint: str) -> str:
     return command
 
 
+def eval_math_expr(command: str) -> int | None:
+    operators = {ast.Add: operator.add, ast.Sub: operator.sub, ast.USub: operator.neg}
+
+    def _eval(node: expr) -> int:
+        match node:
+            case ast.Constant(val) if isinstance(val, int):
+                return val
+            case ast.UnaryOp(op, val) if type(op) in operators:
+                return operators[type(op)](_eval(val))
+            case ast.BinOp(left, op, right) if type(op) in operators:
+                return operators[type(op)](_eval(left), _eval(right))
+            case _:
+                raise ValueError()
+
+    try:
+        return _eval(ast.parse(command, mode='eval').body)
+    except ValueError:
+        return None
+
+
 def is_math_expr(command: str) -> bool:
-    return command.isdigit() or (command[0] == "-" and command[1:].isdigit())
+    return eval_math_expr(command) is not None
 
 
 def is_yes_no(command: str) -> bool:
@@ -86,8 +109,9 @@ class ConsoleApp:
                 print("Current value for", case, "=", result[case])
                 print("Please input value to add:\n>>> ", end="")
                 command = receive_command(is_math_expr, "valid number")
-                print("Changing", result[case], "to", result[case] + int(command))
-                result[case] += int(command)
+                value = eval_math_expr(command)
+                print("Changing", result[case], "to", result[case] + value)
+                result[case] += value
                 print(
                     "Please choose entry to edit or q:\n>>> ", end=""
                 )
@@ -147,8 +171,9 @@ class ConsoleApp:
         print("Current value for", self.data[case_index][0], "=", self.data[case_index][1])
         print("Please input value to add:\n>>> ", end="")
         command = receive_command(is_math_expr, "valid number")
-        print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + int(command))
-        self._update_value(case_index, int(command))
+        value = eval_math_expr(command)
+        print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + value)
+        self._update_value(case_index, value)
         self.has_unsaved_changes = True
         return True
 
