@@ -6,7 +6,7 @@ from typing import Callable
 from parsing import save_new_data_for_testing, process_results
 
 
-def command_cycle(command_validator: Callable[[str], bool], hint: str) -> str:
+def receive_command(command_validator: Callable[[str], bool], hint: str) -> str:
     command = input()
     while not command_validator(command):
         print("I didn't understand you, please type: " + hint + "\n>>> ", end="")
@@ -58,7 +58,7 @@ class ConsoleApp:
                                   bool(re.search(r"^Active boosters SL:", data, re.M)) or
                                   bool(re.search(r"\(PA\)\d+(?: \+ \S*?)* = \d+ SL", data)))
         print("Would you like to improve parsing result?(y/n)\n>>> ", end="")
-        command = command_cycle(is_yes_no, "y (edit result) or n (proceed without editing)")
+        command = receive_command(is_yes_no, "y (edit result) or n (proceed without editing)")
         if command == "y":
             cases = [k for k in result.keys()]
             print(
@@ -71,14 +71,14 @@ class ConsoleApp:
             print(">>> ", end="")
             command = ""
             while command != "q":
-                command = command_cycle(lambda c: c == "q" or is_index(len(cases))(c),
+                command = receive_command(lambda c: c == "q" or is_index(len(cases))(c),
                                         f"number between 1 and {len(cases)} or q")
                 if command == "q":
                     continue
                 case = cases[int(command) - 1]
                 print("Current value for", case, "=", result[case])
                 print("Please input value to add:\n>>> ", end="")
-                command = command_cycle(is_math_expr, "valid number")
+                command = receive_command(is_math_expr, "valid number")
                 print("Changing", result[case], "to", result[case] + int(command))
                 result[case] += int(command)
                 print(
@@ -99,11 +99,11 @@ class ConsoleApp:
         for i in range(len(self.data)):
             print(i + 1, "-", self.data[i][0])
         print(">>> ", end="")
-        command = command_cycle(is_index(len(self.data)), f"number between 1 and {len(self.data)}")
+        command = receive_command(is_index(len(self.data)), f"number between 1 and {len(self.data)}")
         case_index = int(command) - 1
         print("Current value for", self.data[case_index][0], "=", self.data[case_index][1])
         print("Please input value to add:\n>>> ", end="")
-        command = command_cycle(is_math_expr, "valid number")
+        command = receive_command(is_math_expr, "valid number")
         print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + int(command))
         self.data[case_index] = (
             self.data[case_index][0],
@@ -116,7 +116,7 @@ class ConsoleApp:
     def handle_quit(self) -> bool:
         if self.has_unsaved_changes:
             print("There are some unsaved changes, would you like to save them?(y/n)\n>>> ", end="")
-            command = command_cycle(is_yes_no, "y (save changes) or n (proceed without saving)")
+            command = receive_command(is_yes_no, "y (save changes) or n (proceed without saving)")
             if command == "y":
                 pass
         return False
