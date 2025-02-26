@@ -6,6 +6,26 @@ from typing import Callable
 from parsing import save_new_data_for_testing, process_results
 
 
+def command_cycle(command_validator: Callable[[str], bool], hint: str) -> str:
+    command = input()
+    while not command_validator(command):
+        print("I didn't understand you, please type: " + hint + "\n>>> ", end="")
+        command = input()
+    return command
+
+
+def is_math_expr(command: str) -> bool:
+    return command.isdigit() or (command[0] == "-" and command[1:].isdigit())
+
+
+def is_yes_no(command: str) -> bool:
+    return command in ["y", "n"]
+
+
+def is_index(size: int) -> Callable[[str], bool]:
+    return lambda c: c.isdigit() and (0 < int(c) <= size)
+
+
 class ConsoleApp:
     def __init__(self, data_file_path: str | None = None):
         self.data_file_path: str | None = data_file_path
@@ -38,11 +58,7 @@ class ConsoleApp:
                                   bool(re.search(r"^Active boosters SL:", data, re.M)) or
                                   bool(re.search(r"\(PA\)\d+(?: \+ \S*?)* = \d+ SL", data)))
         print("Would you like to improve parsing result?(y/n)\n>>> ", end="")
-        command = input()
-        while command not in ["y", "n"]:
-            print("I didn't understand you, "
-                  "please type: y (edit result) or n (proceed without editing)\n>>> ", end="")
-            command = input()
+        command = command_cycle(is_yes_no, "y (edit result) or n (proceed without editing)")
         if command == "y":
             cases = [k for k in result.keys()]
             print(
@@ -53,22 +69,16 @@ class ConsoleApp:
             for i in range(len(cases)):
                 print(i + 1, "-", cases[i])
             print(">>> ", end="")
-            command = input()
+            command = ""
             while command != "q":
-                while command != "q" and not command.isdigit() and not (0 < int(command) <= len(cases)):
-                    print("I didn't understand you, "
-                          "please type number between 1 and len(cases) or q\n>>> ", end="")
-                    command = input()
+                command = command_cycle(lambda c: c == "q" or is_index(len(cases))(c),
+                                        f"number between 1 and {len(cases)} or q")
                 if command == "q":
                     continue
                 case = cases[int(command) - 1]
                 print("Current value for", case, "=", result[case])
-                print("Please input value to add:\n>>> ",end="")
-                command = input()
-                while not command.isdigit() and not (command[0] == "-" and command[1:].isdigit()):
-                    print("I didn't understand you, "
-                          "please type valid number\n>>> ", end="")
-                    command = input()
+                print("Please input value to add:\n>>> ", end="")
+                command = command_cycle(is_math_expr, "valid number")
                 print("Changing", result[case], "to", result[case] + int(command))
                 result[case] += int(command)
                 print(
@@ -90,30 +100,18 @@ class ConsoleApp:
         for i in range(len(self.data)):
             print(i + 1, "-", self.data[i][0])
         print(">>> ", end="")
-        command = input()
-        while not command.isdigit() and not (0 < int(command) <= len(self.data)):
-            print("I didn't understand you, "
-                  "please type number between 1 and len(cases) or q\n>>> ", end="")
-            command = input()
+        command = command_cycle(is_index(len(self.data)), f"number between 1 and {len(self.data)}")
         case_index = int(command) - 1
         print("Current value for", self.data[case_index][0], "=", self.data[case_index][1])
         print("Please input value to add:\n>>> ", end="")
-        command = input()
-        while not command.isdigit() and not (command[0] == "-" and command[1:].isdigit()):
-            print("I didn't understand you, "
-                  "please type valid number\n>>> ", end="")
-            command = input()
+        command = command_cycle(is_math_expr, "valid number")
         print("Changing", self.data[case_index][1], "to", self.data[case_index][1] + int(command))
         self.data[case_index][1] += int(command)
 
     def handle_quit(self) -> bool:
         if self.has_unsaved_changes:
             print("There are some unsaved changes, would you like to save them?(y/n)\n>>> ", end="")
-            command = input()
-            while command not in ["y", "n"]:
-                print("I didn't understand you, "
-                      "please type: y (save changes) or n (proceed without saving)\n>>> ", end="")
-                command = input()
+            command = command_cycle(is_yes_no, "y (save changes) or n (proceed without saving)")
             if command == "y":
                 pass
         return False
